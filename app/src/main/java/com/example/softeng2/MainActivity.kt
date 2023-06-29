@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                                                 intent.putExtra("UID", uid);
                                                 startActivity(intent);
                                             } else if (selection=="organization") {
-                                                val intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                                val intent = Intent(this@MainActivity, OrganizationSignUpActivity::class.java)
                                                 intent.putExtra("UID", uid);
                                                 startActivity(intent);
                                             }

@@ -56,7 +56,7 @@ class DoctorSignUpActivity : AppCompatActivity() {
                     .addOnSuccessListener {
 
                         Log.d("sendhelp","d")
-                        val intent = Intent(this@DoctorSignUpActivity, Activity_Doctors::class.java)
+                        val intent = Intent(this@DoctorSignUpActivity, DoctorHomeActivity::class.java)
                         startActivity(intent);
                     }
                     .addOnFailureListener { e ->
