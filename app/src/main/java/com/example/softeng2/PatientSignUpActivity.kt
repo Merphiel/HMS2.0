@@ -1,9 +1,13 @@
 package com.example.softeng2
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import com.example.softeng2.databinding.ActivitySignup2Binding
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PatientSignUpActivity : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class PatientSignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup_patient)
 
+        val uid = intent.getStringExtra("UID")
         firstNameEditText = findViewById(R.id.inp_fname)
         middleNameEditText = findViewById(R.id.inp_mname)
         lastNameEditText = findViewById(R.id.inp_lname)
@@ -27,7 +32,30 @@ class PatientSignUpActivity : AppCompatActivity() {
 
         doneButton.setOnClickListener {
             if (validateInputs()) {
-                // Perform signup action here
+                Log.d("sendhelp","b")
+                val db = FirebaseFirestore.getInstance()
+
+                    val uData = HashMap<String,Any>()
+                uData["fname"] = firstNameEditText.text.toString()
+                uData["mname"] = middleNameEditText.text.toString()
+                uData["lname"] = lastNameEditText.text.toString()
+                uData["phone"] = phoneNumberEditText.text.toString()
+                uData["email"] = emailEditText.text.toString()
+
+                Log.d("sendhelp","c")
+                    db.collection("patients")
+                        .document(uid?:"")
+                        .set(uData)
+                        .addOnSuccessListener {
+
+                            Log.d("sendhelp","d")
+                            val intent = Intent(this@PatientSignUpActivity, Activity_Doctors::class.java)
+                            startActivity(intent);
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("signuppatient", "Error writing document", e)
+                        }
+
             }
         }
     }
@@ -57,12 +85,16 @@ class PatientSignUpActivity : AppCompatActivity() {
             emailEditText.error = "Please enter your email"
             return false
         }
+        if(!phoneNumber.matches(Regex("^\\d{11}$"))){
+            phoneNumberEditText.error = "Please enter a valid 11 digit phone number"
+            return false
+        }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.error = "Please enter a valid email"
             return false
         }
-
+    Log.d("sendhelp","a")
         return true
     }
 }
