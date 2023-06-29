@@ -12,8 +12,7 @@ class PatientSignUpActivity : AppCompatActivity() {
     private lateinit var lastNameEditText: EditText
     private lateinit var phoneNumberEditText: EditText
     private lateinit var emailEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var signupButton: Button
+    private lateinit var doneButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +23,9 @@ class PatientSignUpActivity : AppCompatActivity() {
         lastNameEditText = findViewById(R.id.inp_lname)
         phoneNumberEditText = findViewById(R.id.inp_phone)
         emailEditText = findViewById(R.id.inp_email)
-        signupButton = findViewById(R.id.btn_done)
+        doneButton = findViewById(R.id.btn_done)
 
-        signupButton.setOnClickListener {
+        doneButton.setOnClickListener {
             if (validateInputs()) {
                 // Perform signup action here
             }
