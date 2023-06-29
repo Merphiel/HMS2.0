@@ -1,5 +1,5 @@
 package com.example.softeng2
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -30,14 +30,18 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         navigationView = findViewById(R.id.navView)
         recyclerView = findViewById(R.id.rv_doctors)
 
+        // Set the listener for navigation item clicks
         navigationView.setNavigationItemSelectedListener(this)
 
+        // Create and set the ActionBarDrawerToggle
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
+        // Set the action bar's Home button to act as the navigation drawer toggle
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Set up the RecyclerView
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         mAdapter = MyAdapter()
@@ -45,6 +49,7 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle ActionBarDrawerToggle clicks
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
@@ -52,21 +57,31 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation item clicks
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.patients -> Toast.makeText(this, "Patients", Toast.LENGTH_SHORT).show()
-            R.id.hospital -> Toast.makeText(this, "Hospital", Toast.LENGTH_SHORT).show()
+            R.id.hospital -> {
+                Toast.makeText(this, "Hospital", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, DoctorOrganizationActivity::class.java)
+                startActivity(intent)
+            }
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
+            R.id.medicalRecords -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
 
         }
 
+        // Close the drawer after handling the click
         drawerLayout.closeDrawer(navigationView)
         return true
     }
 
+    // Custom Adapter class
     private inner class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+        // ViewHolder class
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val textView: TextView = itemView.findViewById(R.id.tv_patients)
         }
