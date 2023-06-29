@@ -10,8 +10,8 @@
         android:id="@+id/patients"
         android:title="Patients" />
     <item
-        android:id="@+id/hospital"
-        android:title="Hospital" />
+        android:id="@+id/organizations"
+        android:title="Organizations" />
 
     <item android:title="">
         <menu>

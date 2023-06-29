@@ -13,8 +13,8 @@
         android:id="@+id/medicalRecords"
         android:title="Medical Records" />
     <item
-        android:id="@+id/hospital"
-        android:title="Hospital" />
+        android:id="@+id/organizations"
+        android:title="Organizations" />
 
     <item android:title="">
         <menu>

@@ -61,8 +61,8 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.patients -> Toast.makeText(this, "Patients", Toast.LENGTH_SHORT).show()
-            R.id.hospital -> {
-                Toast.makeText(this, "Hospital", Toast.LENGTH_SHORT).show()
+            R.id.organizations -> {
+                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DoctorOrganizationActivity::class.java)
                 startActivity(intent)
             }
