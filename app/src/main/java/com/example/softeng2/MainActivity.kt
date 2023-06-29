@@ -15,9 +15,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
 import java.sql.SQLException
+import org.postgresql.Driver
 
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
@@ -66,55 +71,20 @@ class MainActivity : AppCompatActivity() {
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign-in successful
                     val user = mAuth.currentUser
                     val uid = user?.uid
 
-                    // Proceed with connecting to PostgreSQL and performing operations based on the UID
                     Log.d("Testcase","Success | " + uid)
-                    connectToPostgreSQL(uid)
+                    val db = FirebaseFirestore.getInstance()
+
                 } else {
-                    // Sign-in failed
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     Toast.makeText(this@MainActivity, "Authentication Failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    private fun connectToPostgreSQL(uid: String?) {
-        // Implement your PostgreSQL connection and operations based on the UID
-        // Example:
-        var connection: Connection? = null
-        try {
-            // Establish connection to PostgreSQL
-            connection = DriverManager.getConnection("postgres://caizhiyongdev:TnajYXzkw3l8@ep-tiny-hat-657935.ap-southeast-1.aws.neon.tech/neondb", "caizhiyongdev", "oX3UhcBig1YI")
 
-            // Use the UID to retrieve or manipulate data in PostgreSQL
-            // Example: Execute a query to retrieve user-specific data
-            val query = "SELECT * FROM your_table WHERE uid = ?"
-            val statement = connection.prepareStatement(query)
-            statement.setString(1, uid)
-            val resultSet = statement.executeQuery()
-
-            // Process the results
-            while (resultSet.next()) {
-                // Retrieve data from the result set
-                // Example:
-                val data = resultSet.getString("column_name")
-                // Do something with the retrieved data
-            }
-
-            // Close the statement and result set
-            statement.close()
-            resultSet.close()
-        } catch (e: SQLException) {
-            // Handle any exceptions that occur during the database operations
-            e.printStackTrace()
-        } finally {
-            // Close the database connection
-            connection?.close()
-        }
-    }
 
     companion object {
         private const val TAG = "MainActivity"
