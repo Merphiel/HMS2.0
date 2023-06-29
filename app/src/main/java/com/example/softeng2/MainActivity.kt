@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.softeng2.databinding.ActivitySignup2Binding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,6 +26,7 @@ import java.sql.SQLException
 import org.postgresql.Driver
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var activitySignup2Binding: ActivitySignup2Binding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private val RC_SIGN_IN = 9001
@@ -76,6 +78,66 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("Testcase","Success | " + uid)
                     val db = FirebaseFirestore.getInstance()
+                    val collectionReference = db.collection("users")
+                    val documentReference = collectionReference.document(uid?:"")
+
+                    documentReference.get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            if (documentSnapshot.exists()) {
+                                val data = documentSnapshot.data
+                                Log.d(TAG, "Document 'abc' exists: $data")
+                                val selection= documentSnapshot.data?.get("userType")
+                                if(selection=="patient") {
+                                    intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                    intent.putExtra("UID", uid);
+                                    startActivity(intent);
+                                } else if (selection=="doctor") {
+                                    val intent = Intent(this@MainActivity, DoctorSignUpActivity::class.java)
+                                    intent.putExtra("UID", uid);
+                                    startActivity(intent);
+                                } else if (selection=="organization") {
+                                    val intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                    intent.putExtra("UID", uid);
+                                    startActivity(intent);
+                                }
+                            } else {
+
+                                activitySignup2Binding =ActivitySignup2Binding.inflate(layoutInflater)
+                                setContentView(activitySignup2Binding.root)
+
+                                activitySignup2Binding.btnNext.setOnClickListener() {
+                                    val uData = HashMap<String,Any>()
+                                    val selection = activitySignup2Binding.tvUsers.text.toString().lowercase()
+                                    uData["userType"]= selection
+                                    db.collection("users")
+                                        .document(uid?:"")
+                                        .set(uData)
+                                        .addOnSuccessListener {
+                                            Log.d(TAG, "User" + uid + " added with type" + uData)
+                                            if(selection=="patient") {
+                                                intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                                intent.putExtra("UID", uid);
+                                                startActivity(intent);
+                                            } else if (selection=="doctor") {
+                                                val intent = Intent(this@MainActivity, DoctorSignUpActivity::class.java)
+                                                intent.putExtra("UID", uid);
+                                                startActivity(intent);
+                                            } else if (selection=="organization") {
+                                                val intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                                intent.putExtra("UID", uid);
+                                                startActivity(intent);
+                                            }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w(TAG, "Error writing document", e)
+                                        }
+                                }
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle failure to retrieve the document
+                            Log.e(TAG, "Error getting document 'abc': ", exception)
+                        }
 
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
