@@ -7,7 +7,7 @@
         android:id="@+id/home"
         android:title="Home" />
     <item
-        android:id="@+id/doctors"
+        android:id="@+id/patients"
         android:title="Patients" />
     <item
         android:id="@+id/medicalRecords"
