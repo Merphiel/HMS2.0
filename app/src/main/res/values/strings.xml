@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SOFTENG2</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="book">Book</string>
+    <string name ="open">Open</string>
+    <string name = "close">Close</string>
+
+    <string-array name="users">
+        <item>Patient</item>
+        <item>Doctor</item>
+        <item>Organization</item>
+    </string-array>
+</resources>
