@@ -21,7 +21,7 @@ class Horizontal_RecyclerView : RecyclerView.Adapter<Horizontal_RecyclerView.MyV
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return 25;
     }
 
     class MyViewholder(itemView: View): RecyclerView.ViewHolder(itemView){
