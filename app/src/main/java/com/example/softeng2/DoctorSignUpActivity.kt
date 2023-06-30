@@ -27,6 +27,7 @@ class DoctorSignUpActivity : AppCompatActivity() {
     private lateinit var doneButton: Button
     private lateinit var bio:EditText
     private lateinit var rate:EditText
+    private lateinit var type:AutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class DoctorSignUpActivity : AppCompatActivity() {
         doneButton = findViewById(R.id.btn_done)
         bio=findViewById(R.id.inp_bio)
         rate = findViewById(R.id.inp_rate)
+        type = findViewById(R.id.tv_doctorType)
 
 
         autoCompleteTxt = findViewById<AutoCompleteTextView>(R.id.tv_doctorType)
@@ -66,10 +68,10 @@ class DoctorSignUpActivity : AppCompatActivity() {
                 uData["email"] = emailEditText.text.toString()
                 uData["bio"] = bio.text.toString()
                 uData["rate"] = rate.text.toString().toInt()
-                uData["type"] =
+                uData["type"] = type.text.toString()
 
                 Log.d("sendhelp","c")
-                db.collection("patients")
+                db.collection("doctors")
                     .document(uid?:"")
                     .set(uData)
                     .addOnSuccessListener {

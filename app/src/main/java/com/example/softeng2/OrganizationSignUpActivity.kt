@@ -42,7 +42,7 @@ class OrganizationSignUpActivity : AppCompatActivity() {
                     .addOnSuccessListener {
 
                         Log.d("sendhelp","d")
-                        val intent = Intent(this@OrganizationSignUpActivity, DoctorHomeActivity::class.java)
+                        val intent = Intent(this@OrganizationSignUpActivity, OrganizationHome::class.java)
                         startActivity(intent);
                     }
                     .addOnFailureListener { e ->
