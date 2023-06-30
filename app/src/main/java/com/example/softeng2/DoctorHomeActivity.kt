@@ -69,8 +69,6 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
-            R.id.medicalRecords -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
-
         }
 
         // Close the drawer after handling the click
