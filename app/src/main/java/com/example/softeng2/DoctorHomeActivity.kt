@@ -59,16 +59,29 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation item clicks
         when (item.itemId) {
-            R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-            R.id.patients -> Toast.makeText(this, "Patients", Toast.LENGTH_SHORT).show()
+            R.id.home -> {
+
+            }
+            R.id.patients ->{
+//                val intent = Intent(this, ::class.java)
+//                var uid = intent.getStringExtra("DUID")?:""
+//                intent.putExtra("DUID",uid)
+//                startActivity(intent)
+            }
             R.id.organizations -> {
                 Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DoctorOrganizationActivity::class.java)
+                var uid = intent.getStringExtra("DUID")?:""
+                intent.putExtra("DUID",uid)
                 startActivity(intent)
             }
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
-            R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
+            R.id.logOut -> {
+                val intent = Intent(this@DoctorHomeActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+
         }
 
         // Close the drawer after handling the click

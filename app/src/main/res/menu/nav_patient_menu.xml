@@ -10,9 +10,6 @@
         android:id="@+id/doctors"
         android:title="Doctors" />
     <item
-        android:id="@+id/medicalRecords"
-        android:title="Medical Records" />
-    <item
         android:id="@+id/organizations"
         android:title="Organizations" />
 
