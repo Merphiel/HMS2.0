@@ -35,26 +35,45 @@ class ScheduleActivity: AppCompatActivity() {
         var duid= intent.getStringExtra("DUID")?:""
         var time = intent.getStringExtra("Time")?:""
         var date= intent.getStringExtra("Date")?:""
+        val db = FirebaseFirestore.getInstance()
+        val collectionReference = db.collection("doctors" )
+        val documentReference = collectionReference.document(duid)
+        documentReference.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    dname.setText(
+                        documentSnapshot.data?.get("lname").toString()
+                            +", "+ documentSnapshot.data?.get("fname").toString()
+                            + " "+documentSnapshot.data?.get("mname").toString()+".")
+                    ddate.setText(date + " "+time)
+                    drate.setText(documentSnapshot.data?.get("rate").toString())
+                    dtype.setText(documentSnapshot.data?.get("type").toString())
+                    demail.setText(documentSnapshot.data?.get("email").toString())
+                    dphone.setText(documentSnapshot.data?.get("phone").toString())
+                } else {
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle failure to retrieve the document
+                Log.e("ERROR", "Error getting document at schedule ", exception)
+            }
         drate.setOnClickListener() {
 
         }
         bdphone.setOnClickListener(){
-            val phoneNumber = 1
-            val intent = Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:$phoneNumber")
-            }
-            startActivity(intent)
-            true
-        }
-        bdemail.setOnClickListener() {
-
             val db = FirebaseFirestore.getInstance()
             val collectionReference = db.collection("doctors" )
             val documentReference = collectionReference.document(duid)
             documentReference.get()
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
-                        val selection= documentSnapshot.data?.get("userType")
+                        val phoneNumber= documentSnapshot.data?.get("phone").toString().toInt()
+                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                            data = Uri.parse("tel:$phoneNumber")
+                        }
+                        startActivity(intent)
+                        true
                     } else {
 
                     }
@@ -64,18 +83,38 @@ class ScheduleActivity: AppCompatActivity() {
                     Log.e("ERROR", "Error getting document at schedule ", exception)
                 }
 
-            val recipients = arrayOf("")
+        }
+        bdemail.setOnClickListener() {
 
-            val intentSelector = Intent(Intent.ACTION_SENDTO)
-            intentSelector.data = Uri.parse("mailto:")
-            val emailIntent = Intent(Intent.ACTION_SEND)
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, recipients)
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "test")
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "test")
-            emailIntent.selector = intentSelector
+            val db = FirebaseFirestore.getInstance()
+            val collectionReference = db.collection("doctors" )
+            val documentReference = collectionReference.document(duid)
+            documentReference.get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val selection= documentSnapshot.data?.get("email").toString()
+                        val recipients = arrayOf(selection)
 
-            startActivity(Intent.createChooser(emailIntent, "Send email"))
-            true
+                        val intentSelector = Intent(Intent.ACTION_SENDTO)
+                        intentSelector.data = Uri.parse("mailto:")
+                        val emailIntent = Intent(Intent.ACTION_SEND)
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, recipients)
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "test")
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "test")
+                        emailIntent.selector = intentSelector
+
+                        startActivity(Intent.createChooser(emailIntent, "Send email"))
+                        true
+                    } else {
+
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle failure to retrieve the document
+                    Log.e("ERROR", "Error getting document at schedule ", exception)
+                }
+
+
 
         }
     }
