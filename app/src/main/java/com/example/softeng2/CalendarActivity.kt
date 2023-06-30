@@ -80,12 +80,12 @@ class CalendarActivity : AppCompatActivity() {
                         data["date"]= LocalDate.of(now.year, now.monthValue, now.dayOfMonth)
                         tag=data
                         setOnClickListener {
-                            val retrievedVal = tag as? HashMap<String, Int>
+                            val retrievedVal = tag as? HashMap<String, Any>
                             retrievedVal?.let {
                                 val col= it["col"]?:0
                                 val row=it["row"]?:0
-                                val date=it["date"]
-                                val time=timeSlots[row];
+                                val date=it["date"] as LocalDate
+                                val time=timeSlots[row.toString().toInt()];
                                 val intent = Intent(this@CalendarActivity, ScheduleActivity::class.java)
                                 intent.putExtra("UID", uid);
                                 intent.putExtra("DUID", duid);
