@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -105,6 +108,13 @@ class MainActivity : AppCompatActivity() {
                                 activitySignup2Binding =ActivitySignup2Binding.inflate(layoutInflater)
                                 setContentView(activitySignup2Binding.root)
 
+                                var autoCompleteTxt = findViewById<AutoCompleteTextView>(R.id.tv_users)
+                                var adapterItems = ArrayAdapter<String>(this, R.layout.dropdown_users, arrayOf("Patient","Doctor","Organization"))
+                                autoCompleteTxt.setAdapter(adapterItems)
+                                autoCompleteTxt.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
+                                    val item = parent.getItemAtPosition(position).toString()
+                                    Toast.makeText(applicationContext, "Item: $item", Toast.LENGTH_SHORT).show()
+                                })
                                 activitySignup2Binding.btnNext.setOnClickListener() {
                                     val uData = HashMap<String,Any>()
                                     val selection = activitySignup2Binding.tvUsers.text.toString().lowercase()

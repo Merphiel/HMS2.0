@@ -66,6 +66,7 @@ class DoctorSignUpActivity : AppCompatActivity() {
                 uData["email"] = emailEditText.text.toString()
                 uData["bio"] = bio.text.toString()
                 uData["rate"] = rate.text.toString().toInt()
+                uData["type"] =
 
                 Log.d("sendhelp","c")
                 db.collection("patients")
