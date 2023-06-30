@@ -3,13 +3,21 @@ package com.example.softeng2
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.Integers
 
 class DoctorSignUpActivity : AppCompatActivity() {
+
+    private val items = arrayOf("Dentist", "Dermatologist", "Pediatrician", "Therapist", "Ophthalmologist")
+    private lateinit var autoCompleteTxt: AutoCompleteTextView
+    private lateinit var adapterItems: ArrayAdapter<String>
 
     private lateinit var firstNameEditText: EditText
     private lateinit var middleNameEditText: EditText
@@ -34,6 +42,16 @@ class DoctorSignUpActivity : AppCompatActivity() {
         bio=findViewById(R.id.inp_bio)
         rate = findViewById(R.id.inp_rate)
 
+
+        autoCompleteTxt = findViewById<AutoCompleteTextView>(R.id.tv_doctorType)
+        adapterItems = ArrayAdapter<String>(this, R.layout.dropdown_users, items)
+
+        autoCompleteTxt.setAdapter(adapterItems)
+
+        autoCompleteTxt.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position).toString()
+            Toast.makeText(applicationContext, "Item: $item", Toast.LENGTH_SHORT).show()
+        })
 
         doneButton.setOnClickListener {
             if (validateInputs()) {

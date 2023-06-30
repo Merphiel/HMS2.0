@@ -14,4 +14,13 @@
         <item>Doctor</item>
         <item>Organization</item>
     </string-array>
+
+    <string-array name="doctorType">
+        <item>Dentist</item>
+        <item>Dermatologist</item>
+        <item>Pediatrician</item>
+        <item>Therapist</item>
+        <item>Ophthalmologist</item>
+    </string-array>
+
 </resources>

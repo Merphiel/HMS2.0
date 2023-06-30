@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_patients"
+            android:id="@+id/tv_organizations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -30,7 +30,7 @@
             android:background="@color/gray" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_patients"
+            android:id="@+id/rv_organizations"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -43,7 +43,7 @@
         android:layout_gravity="start"
         android:background="@color/white"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_patient_menu"
+        app:menu="@menu/nav_organization_menu"
         android:fitsSystemWindows="true" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

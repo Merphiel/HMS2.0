@@ -14,21 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 
-class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var mAdapter: MyAdapter
+    private lateinit var mAdapter: OrganizationHome.MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_doctor_home)
+        setContentView(R.layout.activity_organization_home)
 
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.navView)
-        recyclerView = findViewById(R.id.rv_doctors)
+        recyclerView = findViewById(R.id.rv_organizations)
 
         // Set the listener for navigation item clicks
         navigationView.setNavigationItemSelectedListener(this)
@@ -60,34 +60,25 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         // Handle navigation item clicks
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-            R.id.patients -> Toast.makeText(this, "Patients", Toast.LENGTH_SHORT).show()
-            R.id.organizations -> {
-                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, DoctorOrganizationActivity::class.java)
-                startActivity(intent)
-            }
+            R.id.doctors -> Toast.makeText(this, "Doctors", Toast.LENGTH_SHORT).show()
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
-            R.id.medicalRecords -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
-
         }
 
         // Close the drawer after handling the click
         drawerLayout.closeDrawer(navigationView)
         return true
     }
-
-    // Custom Adapter class
-    private inner class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+    private inner class MyAdapter : RecyclerView.Adapter<OrganizationHome.MyAdapter.ViewHolder>() {
 
         // ViewHolder class
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textView: TextView = itemView.findViewById(R.id.tv_patients)
+            val textView: TextView = itemView.findViewById(R.id.tv_doctors)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_patients, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_doctors, parent, false)
             return ViewHolder(view)
         }
 
