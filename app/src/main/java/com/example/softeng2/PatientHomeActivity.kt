@@ -60,7 +60,13 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         // Handle navigation item clicks
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-            R.id.doctors -> Toast.makeText(this, "Doctors", Toast.LENGTH_SHORT).show()
+            R.id.doctors -> {
+                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
+                val uid= intent.getStringExtra("PUID")
+                val intent = Intent(this, DoctorsActivity::class.java)
+                intent.putExtra("PUID",uid)
+                startActivity(intent)
+            }
             R.id.organizations -> {
                 Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, OrganizationActivity::class.java)

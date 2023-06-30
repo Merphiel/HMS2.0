@@ -63,15 +63,15 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
             }
             R.id.patients ->{
-//                val intent = Intent(this, ::class.java)
-//                var uid = intent.getStringExtra("DUID")?:""
-//                intent.putExtra("DUID",uid)
-//                startActivity(intent)
+                var uid = intent.getStringExtra("DUID")?:""
+                val intent = Intent(this, PatientActivity::class.java)
+                intent.putExtra("DUID",uid)
+                startActivity(intent)
             }
             R.id.organizations -> {
                 Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, DoctorOrganizationActivity::class.java)
                 var uid = intent.getStringExtra("DUID")?:""
+                val intent = Intent(this, DoctorOrganizationActivity::class.java)
                 intent.putExtra("DUID",uid)
                 startActivity(intent)
             }

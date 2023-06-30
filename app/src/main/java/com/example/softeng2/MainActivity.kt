@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                                 Log.d(TAG, "Document 'abc' exists: $data")
                                 val selection= documentSnapshot.data?.get("userType")
                                 if(selection=="patient") {
-                                    intent = Intent(this@MainActivity, PatientActivity::class.java)
+                                    intent = Intent(this@MainActivity, PatientHomeActivity::class.java)
                                     intent.putExtra("UID", uid);
                                     startActivity(intent);
                                 } else if (selection=="doctor") {
