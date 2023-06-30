@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 
-class OrganizationHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var mAdapter: OrganizationHomeActivity.MyAdapter
+    private lateinit var mAdapter: OrganizationHome.MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +70,7 @@ class OrganizationHomeActivity : AppCompatActivity(), NavigationView.OnNavigatio
         drawerLayout.closeDrawer(navigationView)
         return true
     }
-    private inner class MyAdapter : RecyclerView.Adapter<OrganizationHomeActivity.MyAdapter.ViewHolder>() {
+    private inner class MyAdapter : RecyclerView.Adapter<OrganizationHome.MyAdapter.ViewHolder>() {
 
         // ViewHolder class
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
