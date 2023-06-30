@@ -5,9 +5,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="book">Book</string>
-    <string name ="navigation_drawer_open">Open</string>
-    <string name = "navigation_drawer_close">Close</string>
-    <string name = "signUp">Sign Up</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="signUp">Sign Up</string>
 
     <string-array name="users">
         <item>Patient</item>
