@@ -17,7 +17,7 @@ class Horizontal_RecyclerView : RecyclerView.Adapter<Horizontal_RecyclerView.MyV
     }
 
     override fun onBindViewHolder(holder: Horizontal_RecyclerView.MyViewholder, position: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getItemCount(): Int {
