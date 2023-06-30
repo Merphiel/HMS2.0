@@ -78,6 +78,9 @@ class DoctorSignUpActivity : AppCompatActivity() {
 
                         Log.d("sendhelp","d")
                         val intent = Intent(this@DoctorSignUpActivity, DoctorHomeActivity::class.java)
+
+                        var uid = intent.getStringExtra("DUID")?:""
+                        intent.putExtra("DUID",uid)
                         startActivity(intent);
                     }
                     .addOnFailureListener { e ->
