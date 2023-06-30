@@ -62,11 +62,7 @@ class PatientActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.doctors -> Toast.makeText(this, "Doctors", Toast.LENGTH_SHORT).show()
             R.id.medicalRecords -> Toast.makeText(this, "Medical Records", Toast.LENGTH_SHORT).show()
-            R.id.organizations -> {
-                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, OrganizationActivity::class.java)
-                startActivity(intent)
-            }
+            R.id.organizations -> Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
