@@ -35,7 +35,7 @@ class ScheduleActivity: AppCompatActivity() {
         back.setOnClickListener() {
             onBackPressed()
         }
-        var uid = intent.getStringExtra("UID")?:""
+        var uid = intent.getStringExtra("PUID")?:""
         var duid= intent.getStringExtra("DUID")?:""
         var time = intent.getStringExtra("Time")?:""
         var date= intent.getStringExtra("Date")?:""
@@ -76,7 +76,7 @@ class ScheduleActivity: AppCompatActivity() {
             Log.d("sendhelp","c")
 
 
-            var documentRef = db.collection("Users").document(uid)
+            var documentRef = db.collection("patients").document(uid)
 
             documentRef.update("schedules", FieldValue.arrayUnion(uData))
                 .addOnSuccessListener {
@@ -100,7 +100,7 @@ class ScheduleActivity: AppCompatActivity() {
                         println("Error adding array entry: $exception")
                     }
                 }
-            documentRef = db.collection("Doctors").document(duid)
+            documentRef = db.collection("doctors").document(duid)
 
             documentRef.update("schedules", FieldValue.arrayUnion(uData))
                 .addOnSuccessListener {

@@ -19,7 +19,7 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var mAdapter: PatientHomeActivity.MyAdapter
+    private lateinit var mAdapter: MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +61,8 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.doctors -> {
-                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 val uid= intent.getStringExtra("PUID")
+                Toast.makeText(this, uid, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DoctorsActivity::class.java)
                 intent.putExtra("PUID",uid)
                 startActivity(intent)

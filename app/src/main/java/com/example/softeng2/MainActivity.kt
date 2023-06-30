@@ -92,15 +92,15 @@ class MainActivity : AppCompatActivity() {
                                 val selection= documentSnapshot.data?.get("userType")
                                 if(selection=="patient") {
                                     intent = Intent(this@MainActivity, PatientHomeActivity::class.java)
-                                    intent.putExtra("UID", uid);
+                                    intent.putExtra("PUID", uid);
                                     startActivity(intent);
                                 } else if (selection=="doctor") {
                                     val intent = Intent(this@MainActivity, DoctorHomeActivity::class.java)
-                                    intent.putExtra("UID", uid);
+                                    intent.putExtra("DUID", uid);
                                     startActivity(intent);
                                 } else if (selection=="organization") {
                                     val intent = Intent(this@MainActivity, OrganizationHome::class.java)
-                                    intent.putExtra("UID", uid);
+                                    intent.putExtra("OUID", uid);
                                     startActivity(intent);
                                 }
                             } else {

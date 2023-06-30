@@ -2,6 +2,7 @@ package com.example.softeng2.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
@@ -20,9 +21,12 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
             val db = Firebase.firestore
             val doctorsCollectionRef = db.collection("doctors")
 
+            Log.d("errorasd",duid)
+            Log.d("errorasd",duid)
             doctorsCollectionRef.document(duid).get()
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
+                        Log.d("errorasd","test")
                     doctorCardBinding.tvName.text = (
                             documentSnapshot.data?.get("lname").toString()
                                     + ", " + documentSnapshot.data?.get("fname").toString()
@@ -34,7 +38,9 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
 
                         doctorCardBinding.tvFee.text = ("PHP " +
                                 documentSnapshot.data?.get("rate").toString())
-                }
+                } else {
+
+                    }
 
 
                 }
@@ -47,6 +53,7 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
                 val intent = Intent(context, CalendarActivity::class.java)
                 intent.putExtra("PUID",uid)
                 intent.putExtra("DUID",duid)
+                Log.d("asdc",uid+" " + duid)
                 context.startActivity(intent)
             }
         }
@@ -57,8 +64,15 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
         return ViewHolder(binding,context)
     }
 
-    override fun getItemCount(): Int {
-        return num
+    override fun getItemCount(): Int {    val db = Firebase.firestore
+        val doctorsCollectionRef = db.collection("doctors")
+        doctorsCollectionRef.get()
+            .addOnSuccessListener { querySnapshot ->
+            }
+            .addOnFailureListener { exception ->
+                println("Error getting documents from 'doctors' collection: $exception")
+            }
+        return 2;
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -69,6 +83,8 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
             .addOnSuccessListener { querySnapshot ->
                 for (documentSnapshot in querySnapshot) {
                     val documentId = documentSnapshot.id
+
+                    Log.d("errorasddid",documentId)
                     holder.bind(documentId, position)
                     num++;
                 }

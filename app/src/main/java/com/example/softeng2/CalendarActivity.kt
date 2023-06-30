@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.GridLayout
@@ -24,7 +25,7 @@ class CalendarActivity : AppCompatActivity() {
     lateinit var duid:String
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        uid = intent.getStringExtra("UID")?:""
+        uid = intent.getStringExtra("PUID")?:""
         duid= intent.getStringExtra("DUID")?:""
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
@@ -85,12 +86,13 @@ class CalendarActivity : AppCompatActivity() {
                                 val col= it["col"]?:0
                                 val row=it["row"]?:0
                                 val date=it["date"] as LocalDate
-                                val time=timeSlots[row.toString().toInt()];
+                                val time="${timeSlots[row.toString().toInt()] / 60}:${if (timeSlots[row.toString().toInt()] % 60 == 0) "00" else "30"}"
+                                Log.d("asdcd",uid+" " + duid + date + time)
                                 val intent = Intent(this@CalendarActivity, ScheduleActivity::class.java)
-                                intent.putExtra("UID", uid);
+                                intent.putExtra("PUID", uid);
                                 intent.putExtra("DUID", duid);
-                                intent.putExtra("Date", date);
-                                intent.putExtra("Time",time)
+                                intent.putExtra("Date", date.toString());
+                                intent.putExtra("Time", time)
                                 startActivity(intent);
                             }
                         }
