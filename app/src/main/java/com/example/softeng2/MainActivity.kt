@@ -91,15 +91,15 @@ class MainActivity : AppCompatActivity() {
                                 Log.d(TAG, "Document 'abc' exists: $data")
                                 val selection= documentSnapshot.data?.get("userType")
                                 if(selection=="patient") {
-                                    intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                    intent = Intent(this@MainActivity, PatientActivity::class.java)
                                     intent.putExtra("UID", uid);
                                     startActivity(intent);
                                 } else if (selection=="doctor") {
-                                    val intent = Intent(this@MainActivity, DoctorSignUpActivity::class.java)
+                                    val intent = Intent(this@MainActivity, DoctorHomeActivity::class.java)
                                     intent.putExtra("UID", uid);
                                     startActivity(intent);
                                 } else if (selection=="organization") {
-                                    val intent = Intent(this@MainActivity, PatientSignUpActivity::class.java)
+                                    val intent = Intent(this@MainActivity, OrganizationHome::class.java)
                                     intent.putExtra("UID", uid);
                                     startActivity(intent);
                                 }
