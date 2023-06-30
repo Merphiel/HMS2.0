@@ -29,21 +29,31 @@
             android:layout_marginBottom="20dp"
             android:background="@color/gray" />
 
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="428dp"
+            android:layout_height="659dp"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/nav_patient_menu">
+
+        </com.google.android.material.navigation.NavigationView>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_patients"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_patient_menu"
-        android:fitsSystemWindows="true" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
