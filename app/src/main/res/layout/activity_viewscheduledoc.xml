@@ -16,10 +16,10 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Schedule An Appointment"
+            android:layout_marginBottom="50dp"
             android:fontFamily="@font/inter_bold"
-            android:textSize="25sp"
-            android:layout_marginBottom="50dp"/>
+            android:text="Appointment Information"
+            android:textSize="25sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_docname"
+                android:id="@+id/tv_patname"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -35,7 +35,7 @@
                 android:text="Name" />
 
             <TextView
-                android:id="@+id/tv_docemail"
+                android:id="@+id/tv_patemail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -43,7 +43,7 @@
                 android:text="Email" />
 
             <TextView
-                android:id="@+id/tv_docphone"
+                android:id="@+id/tv_patphone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -121,8 +121,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Schedule Now"
-                app:cornerRadius="3dp"/>
+                android:text="Cancel"
+                app:cornerRadius="3dp" />
 
         </LinearLayout>
 

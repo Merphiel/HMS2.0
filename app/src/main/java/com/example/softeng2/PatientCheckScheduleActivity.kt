@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 
-class ScheduleActivity: AppCompatActivity() {
+class PatientCheckScheduleActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
@@ -45,8 +45,8 @@ class ScheduleActivity: AppCompatActivity() {
                 if (documentSnapshot.exists()) {
                     dname.setText(
                         documentSnapshot.data?.get("lname").toString()
-                            +", "+ documentSnapshot.data?.get("fname").toString()
-                            + " "+documentSnapshot.data?.get("mname").toString()+".")
+                                +", "+ documentSnapshot.data?.get("fname").toString()
+                                + " "+documentSnapshot.data?.get("mname").toString()+".")
                     ddate.setText(date + " "+time)
                     drate.setText(documentSnapshot.data?.get("rate").toString())
                     dtype.setText(documentSnapshot.data?.get("type").toString())
