@@ -5,55 +5,43 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softeng2.CalendarActivity
 import com.example.softeng2.DoctorsActivity
 import com.example.softeng2.databinding.DoctorCardBinding
-import com.example.softeng2.databinding.ItemListBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView.Adapter<DoctorListAdapter.ViewHolder>(){
+class DoctorListAdapter(
+    private val documentList: MutableList<Map<String, Any>>,
+    private val itemcount: Int,
+    private val context: Context,
+    private val puid: String
+) : RecyclerView.Adapter<DoctorListAdapter.ViewHolder>(){
     var num=0
     class ViewHolder(private val doctorCardBinding:DoctorCardBinding, private val context: Context) : RecyclerView.ViewHolder(doctorCardBinding.root){
-        fun bind(duid:String, pos:Int) {
+        fun bind(doc: Map<String, Any>, pos:Int) {
             val db = Firebase.firestore
             val doctorsCollectionRef = db.collection("doctors")
-
-            Log.d("errorasd",duid)
-            Log.d("errorasd",duid)
-            doctorsCollectionRef.document(duid).get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()) {
-                        Log.d("errorasd","test")
+            Log.d("errorasd",doc.get("UID").toString())
                     doctorCardBinding.tvName.text = (
-                            documentSnapshot.data?.get("lname").toString()
-                                    + ", " + documentSnapshot.data?.get("fname").toString()
-                                    + " " + documentSnapshot.data?.get("mname")
+                            doc.get("lname").toString()
+                                    + ", " + doc.get("fname").toString()
+                                    + " " + doc.get("mname")
                                 .toString() + ".")
 
                         doctorCardBinding.tvType.text = (
-                                documentSnapshot.data?.get("type").toString())
+                                doc.get("type").toString())
 
                         doctorCardBinding.tvFee.text = ("PHP " +
-                                documentSnapshot.data?.get("rate").toString())
-                } else {
-
-                    }
-
-
-                }
-                .addOnFailureListener { exception ->
-                    println("Error getting documents from 'doctors' collection: $exception")
-                }
+                                doc.get("rate").toString())
 
             doctorCardBinding.btnBook.setOnClickListener() {
                 val uid= (context as DoctorsActivity).intent.getStringExtra("PUID")
                 val intent = Intent(context, CalendarActivity::class.java)
                 intent.putExtra("PUID",uid)
-                intent.putExtra("DUID",duid)
-                Log.d("asdc",uid+" " + duid)
+                intent.putExtra("DUID",doc.get("UID").toString())
+                Log.d("asdc",uid+" " + doc.get("UID").toString())
                 context.startActivity(intent)
             }
         }
@@ -64,15 +52,9 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
         return ViewHolder(binding,context)
     }
 
-    override fun getItemCount(): Int {    val db = Firebase.firestore
-        val doctorsCollectionRef = db.collection("doctors")
-        doctorsCollectionRef.get()
-            .addOnSuccessListener { querySnapshot ->
-            }
-            .addOnFailureListener { exception ->
-                println("Error getting documents from 'doctors' collection: $exception")
-            }
-        return 2;
+    override fun getItemCount(): Int {
+        Log.d("aasda",itemcount.toString())
+        return itemcount
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -83,9 +65,8 @@ class DoctorListAdapter(private val context: Context,puid:String) : RecyclerView
             .addOnSuccessListener { querySnapshot ->
                 for (documentSnapshot in querySnapshot) {
                     val documentId = documentSnapshot.id
-
                     Log.d("errorasddid",documentId)
-                    holder.bind(documentId, position)
+                    holder.bind(documentList[num], position)
                     num++;
                 }
             }
