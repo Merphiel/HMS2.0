@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        mGoogleSignInClient.revokeAccess()
 
         val signInButton: Button = findViewById(R.id.signInBtn)
         signInButton.setOnClickListener {
@@ -92,6 +93,8 @@ class MainActivity : AppCompatActivity() {
                                 val selection= documentSnapshot.data?.get("userType")
                                 if(selection=="patient") {
                                     intent = Intent(this@MainActivity, PatientHomeActivity::class.java)
+
+                                    Log.d("aasdc", uid?:"")
                                     intent.putExtra("PUID", uid);
                                     startActivity(intent);
                                 } else if (selection=="doctor") {

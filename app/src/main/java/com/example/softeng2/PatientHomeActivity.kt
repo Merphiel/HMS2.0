@@ -1,6 +1,7 @@
 package com.example.softeng2
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.Timestamp
+import java.time.ZoneOffset
 
 class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -62,6 +65,7 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.doctors -> {
                 val uid= intent.getStringExtra("PUID")
+                Log.d("aasdb", uid?:"")
                 Toast.makeText(this, uid, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DoctorsActivity::class.java)
                 intent.putExtra("PUID",uid)
@@ -70,6 +74,14 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.organizations -> {
                 Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, OrganizationActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.appointments -> {
+                val uid= intent.getStringExtra("PUID")
+                Toast.makeText(this, "Appointments", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, PatientCalendarAppointmentsActivity::class.java)
+                intent.putExtra("PUID",uid)
                 startActivity(intent)
             }
 

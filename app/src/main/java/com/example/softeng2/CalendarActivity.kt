@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -23,8 +24,10 @@ class CalendarActivity : AppCompatActivity() {
     lateinit var curDateBasis:LocalDate;
     lateinit var uid:String
     lateinit var duid:String
+    lateinit var map:HashMap<Pair<Int,Int>,Int>
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        map=HashMap<Pair<Int,Int>,Int>()
         uid = intent.getStringExtra("PUID")?:""
         duid= intent.getStringExtra("DUID")?:""
         super.onCreate(savedInstanceState)
@@ -55,6 +58,15 @@ class CalendarActivity : AppCompatActivity() {
                         shape = GradientDrawable.RECTANGLE
                         setStroke(2, Color.BLACK) // Set border thickness and color
                     }
+                    var res=0;
+                    if (map.containsKey(Pair(row,col))) {
+                        val res= map.get(Pair(row,col))
+                        if(res==1) {
+                            setBackgroundColor(Color.GREEN)
+                        }else if (res==2) {
+                            setBackgroundColor(Color.RED)
+                        }
+                    }
                     gravity = Gravity.CENTER
                     id = View.generateViewId()
                     array[row][col]=id;
@@ -81,19 +93,30 @@ class CalendarActivity : AppCompatActivity() {
                         data["date"]= LocalDate.of(now.year, now.monthValue, now.dayOfMonth)
                         tag=data
                         setOnClickListener {
-                            val retrievedVal = tag as? HashMap<String, Any>
-                            retrievedVal?.let {
-                                val col= it["col"]?:0
-                                val row=it["row"]?:0
-                                val date=it["date"] as LocalDate
-                                val time="${timeSlots[row.toString().toInt()] / 60}:${if (timeSlots[row.toString().toInt()] % 60 == 0) "00" else "30"}"
-                                Log.d("asdcd",uid+" " + duid + date + time)
-                                val intent = Intent(this@CalendarActivity, ScheduleActivity::class.java)
-                                intent.putExtra("PUID", uid);
-                                intent.putExtra("DUID", duid);
-                                intent.putExtra("Date", date.toString());
-                                intent.putExtra("Time", time)
-                                startActivity(intent);
+                            if (res==2) {
+                            Toast.makeText(applicationContext, "Someone Else is already scheduled For this Appointment", Toast.LENGTH_SHORT).show()
+                        } else {
+                                val retrievedVal = tag as? HashMap<String, Any>
+                                retrievedVal?.let {
+                                    val col = it["col"] ?: 0
+                                    val row = it["row"] ?: 0
+                                    val date = it["date"] as LocalDate
+                                    val time = "${
+                                        timeSlots[row.toString().toInt()] / 60
+                                    }:${
+                                        if (timeSlots[row.toString()
+                                                .toInt()] % 60 == 0
+                                        ) "00" else "30"
+                                    }"
+                                    Log.d("asdcd", uid + " " + duid + date + time)
+                                    val intent =
+                                        Intent(this@CalendarActivity, ScheduleActivity::class.java)
+                                    intent.putExtra("PUID", uid);
+                                    intent.putExtra("DUID", duid);
+                                    intent.putExtra("Date", date.toString());
+                                    intent.putExtra("Time", time)
+                                    startActivity(intent);
+                                }
                             }
                         }
                     }
