@@ -12,18 +12,18 @@
 
     <item android:id="@+id/appointments"
         android:title="Appointments" />
-    <item android:title="">
-        <menu>
-            <item
-                android:id="@+id/myProfile"
-                android:title="My Profile" />
-            <item
-                android:id="@+id/settings"
-                android:title="Settings" />
+<!--    <item android:title="">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/myProfile"-->
+<!--                android:title="My Profile" />-->
+<!--            <item-->
+<!--                android:id="@+id/settings"-->
+<!--                android:title="Settings" />-->
             <item
                 android:id="@+id/logOut"
                 android:title="Log Out" />
-        </menu>
-    </item>
+<!--        </menu>-->
+<!--    </item>-->
 
 </menu>
