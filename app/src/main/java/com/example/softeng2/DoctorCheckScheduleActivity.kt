@@ -59,6 +59,7 @@ class DoctorCheckScheduleActivity: AppCompatActivity() {
             }
         sched.setOnClickListener() {
             db.collection("schedules").document(sid).delete()
+            onBackPressed()
 
         }
         bdphone.setOnClickListener(){

@@ -41,7 +41,7 @@ class DoctorsActivity : AppCompatActivity(){
                     }
                 }
                 adapter = DoctorListAdapter(documentList ,count,this,puid)
-                activityDoctorsBinding.rvDoctors.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                activityDoctorsBinding.rvDoctors.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 activityDoctorsBinding.rvDoctors.adapter = adapter;
                 setContentView(activityDoctorsBinding.root)
             }
