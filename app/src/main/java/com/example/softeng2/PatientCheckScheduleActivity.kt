@@ -38,6 +38,7 @@ class PatientCheckScheduleActivity: AppCompatActivity() {
         var duid= intent.getStringExtra("DUID")?:""
         var time = intent.getStringExtra("Time")?:""
         var date= intent.getStringExtra("Date")?:""
+        var sid= intent.getStringExtra("SID")?:""
         val db = FirebaseFirestore.getInstance()
         val collectionReference = db.collection("doctors" )
         val documentReference = collectionReference.document(duid)
@@ -62,68 +63,8 @@ class PatientCheckScheduleActivity: AppCompatActivity() {
                 Log.e("ERROR", "Error getting document at schedule ", exception)
             }
         sched.setOnClickListener() {
-
-            Log.d("sendhelp","b")
-            val db = FirebaseFirestore.getInstance()
-
-            val uData = HashMap<String,Any>()
-            uData["PUID"] = uid
-            uData["DUID"] = duid
-            uData["Date"] = date
-            uData["Time"] = time
-
-            Log.d("sendhelp","c")
-
-
-            var documentRef = db.collection("patients").document(uid)
-
-            documentRef.update("schedules", FieldValue.arrayUnion(uData))
-                .addOnSuccessListener {
-                    // Update successful
-                    println("Array entry added successfully.")
-                }
-                .addOnFailureListener { exception ->
-                    // Check if the exception is due to arrayField not existing
-                    if (exception is FirebaseFirestoreException && exception.code == FirebaseFirestoreException.Code.NOT_FOUND) {
-                        // If arrayField doesn't exist, create it and add the entry
-                        documentRef.set(hashMapOf("arrayField" to arrayListOf(uData)), SetOptions.merge())
-                            .addOnSuccessListener {
-                                println("Array field created and entry added successfully.")
-                            }
-                            .addOnFailureListener { e ->
-                                // Error handling
-                                println("Error creating array field and adding entry: $e")
-                            }
-                    } else {
-                        // Error handling for other exceptions
-                        println("Error adding array entry: $exception")
-                    }
-                }
-            documentRef = db.collection("doctors").document(duid)
-
-            documentRef.update("schedules", FieldValue.arrayUnion(uData))
-                .addOnSuccessListener {
-                    // Update successful
-                    println("Array entry added successfully.")
-                }
-                .addOnFailureListener { exception ->
-                    // Check if the exception is due to arrayField not existing
-                    if (exception is FirebaseFirestoreException && exception.code == FirebaseFirestoreException.Code.NOT_FOUND) {
-                        // If arrayField doesn't exist, create it and add the entry
-                        documentRef.set(hashMapOf("arrayField" to arrayListOf(uData)), SetOptions.merge())
-                            .addOnSuccessListener {
-                                println("Array field created and entry added successfully.")
-                            }
-                            .addOnFailureListener { e ->
-                                // Error handling
-                                println("Error creating array field and adding entry: $e")
-                            }
-                    } else {
-                        // Error handling for other exceptions
-                        println("Error adding array entry: $exception")
-                    }
-                }
-
+            db.collection("schedules").document(sid).delete()
+            onBackPressed()
         }
         bdphone.setOnClickListener(){
             val db = FirebaseFirestore.getInstance()

@@ -18,6 +18,7 @@ import com.example.softeng2.Adapter.DoctorListAdapter
 import com.example.softeng2.databinding.AppointmentCardBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -58,8 +59,14 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         // Set up the RecyclerView
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
+        loadData()
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        loadData()
+    }
+    fun loadData() {
         val db = Firebase.firestore
         val documentList = mutableListOf<Map<String, Any>>()
         val now = LocalDate.now()
@@ -68,28 +75,11 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             .toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().toEpochSecond(ZoneOffset.UTC),0)
         val maxts:Timestamp= Timestamp(LocalDate.parse(LocalDate.of(max.year,max.monthValue,max.dayOfMonth)
             .toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().toEpochSecond(ZoneOffset.UTC),0)
-        db.collection("schedules").document("5BMDpeSMuXbPoBDNcnqN").get().addOnSuccessListener() {
-            data->
-            val temp = data.data!!.get("Date") as Timestamp
-            Log.d("date collection" , temp.toString())
-            Log.d("date collection" , now.toString())
-            Log.d("date collection", max.toString())
-            Log.d("date collection" , nowts.toString())
-            Log.d("date collection", maxts.toString())
-            if (temp>=nowts) {
-
-                Log.d("date ver", "is within range of 1")
-            }
-            if (temp<=maxts) {
-
-                Log.d("date ver", "is within range of 2")
-            }
-            Log.d("date puid",intent.getStringExtra("PUID").toString())
-        }
         db.collection("schedules")
             .whereGreaterThan("Date",nowts)
             .whereLessThan("Date",maxts)
             .whereEqualTo("PUID",intent.getStringExtra("PUID").toString())
+            .orderBy("Date", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 Log.d("aasdac",querySnapshot.size().toString())
@@ -101,28 +91,31 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                         documentHashMap["SID"]=document.id
                         for ((key, value) in it.entries) {
                             documentHashMap[key] = value
+                            Log.d("arrVal",documentHashMap.entries.joinToString("\n") { (key, value) -> "$key: $value" })
                         }
                         db.collection("doctors").document(documentHashMap["DUID"].toString()).get().addOnSuccessListener {
-                            data->
-                            val documentData2 = data.data
-                                documentData2?.let {
-                                    for ((key, value) in it.entries) {
-                                        documentHashMap[key] = value
-                                    }
+                                data-> val documentData2 = data.data
+                            documentData2?.let {
+                                for ((key, value) in it.entries) {
+                                    documentHashMap[key] = value
+                                    Log.d("arrVal2",documentHashMap.entries.joinToString("\n") { (key, value) -> "$key: $value" })
                                 }
+                                documentList.add(documentHashMap)
+                                if(documentList.size==count) {
+                                    Log.d("arrVal3",documentList.toString())
+                                    mAdapter = MyAdapter(documentList,count,this,intent.getStringExtra("PUID")?:"")
+                                    recyclerView.adapter = mAdapter
+                                }
+                            }
 
                         }
-                        documentList.add(documentHashMap)
                     }
                 }
-                mAdapter = MyAdapter(documentList,count,this,intent.getStringExtra("PUID")?:"")
-                recyclerView.adapter = mAdapter
             }
             .addOnFailureListener { exception ->
                 println("Error getting documents: $exception")
             }
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle ActionBarDrawerToggle clicks
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -170,12 +163,11 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 apt.let {
 
                 }
-                appointmentCardBinding.tvFee.text=apt.get("rate").toString()
-                appointmentCardBinding.tvName.text=apt.get("rate").toString()
+                appointmentCardBinding.tvFee.text=apt.get("rate").toString() + " PHP"
+                appointmentCardBinding.tvName.text= apt.get("lname").toString()+ ", " + apt.get("fname").toString()+ " " + apt.get("mname").toString() + "."
                 val dateFormat = SimpleDateFormat("dd MMMM yyyy")
                 val date = apt.get("Date") as Timestamp
-
-                appointmentCardBinding.tvTime.text=apt.get(dateFormat.format(date.toDate())+" "+apt.get("Time")).toString()
+                appointmentCardBinding.tvTime.text="When: " + dateFormat.format(date.toDate())+" "+apt.get("Time").toString()
             appointmentCardBinding.btnDetails.setOnClickListener() {
                 val uid= (context as PatientHomeActivity).intent.getStringExtra("PUID")
                 val intent = Intent(context, PatientCheckScheduleActivity::class.java)
@@ -184,7 +176,7 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 intent.putExtra("SID",apt.get("SID").toString())
                 intent.putExtra("Time",apt.get("Time").toString())
                 intent.putExtra("Date",apt.get("Date").toString())
-                Log.d("asdc",apt.get("UID").toString()+apt.get("PUID").toString() + apt.get("DUID").toString())
+                Log.d("asdc",apt.get("SID").toString()+apt.get("PUID").toString() + apt.get("DUID").toString())
                 context.startActivity(intent)
             }
          }
