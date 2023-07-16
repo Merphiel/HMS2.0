@@ -53,26 +53,35 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         val db = Firebase.firestore
         val documentList = mutableListOf<Map<String, Any>>()
-        val doctorsCollectionRef = db.collection("doctors").get()
-            .addOnSuccessListener { querySnapshot ->
-                count = querySnapshot.size()
-                for (document in querySnapshot.documents) {
-                    val documentData = document.data
-                    documentData?.let {
-                        val documentHashMap = HashMap<String, Any>()
-                        documentHashMap["UID"]=document.id
-                        for ((key, value) in it.entries) {
-                            documentHashMap[key] = value
+        db.collection("organizations").document(intent.getStringExtra("OUID").toString()).get().addOnSuccessListener{
+            data->
+            Log.d("data",intent.getStringExtra("OUID").toString())
+            val org = data.data!!.get("OID").toString()
+            Log.d("data",org)
+            val doctorsCollectionRef = db.collection("doctors")
+                .whereEqualTo("org",org)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    count = querySnapshot.size()
+                    Log.d("count",count.toString())
+                    for (document in querySnapshot.documents) {
+                        val documentData = document.data
+                        documentData?.let {
+                            val documentHashMap = HashMap<String, Any>()
+                            documentHashMap["UID"]=document.id
+                            for ((key, value) in it.entries) {
+                                documentHashMap[key] = value
+                            }
+                            documentList.add(documentHashMap)
                         }
-                        documentList.add(documentHashMap)
                     }
+                    mAdapter = MyAdapter(documentList,count,this)
+                    recyclerView.adapter = mAdapter
                 }
-                mAdapter = MyAdapter(documentList,count,this)
-                recyclerView.adapter = mAdapter
-            }
-            .addOnFailureListener { exception ->
-                println("Error getting documents: $exception")
-            }
+                .addOnFailureListener { exception ->
+                    println("Error getting documents: $exception")
+                }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -86,9 +95,14 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation item clicks
         when (item.itemId) {
-            R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+            R.id.home -> {
+
+            }
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
-            R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
+            R.id.logOut -> {
+                val intent = Intent(this@OrganizationHome, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         // Close the drawer after handling the click
@@ -105,6 +119,7 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
         inner class ViewHolder(private val doctorCardBinding: DoctorCardBinding, private val context: Context) : RecyclerView.ViewHolder(doctorCardBinding.root){
             fun bind(doc: Map<String, Any>, pos:Int) {
                 Log.d("errorasd",doc.get("UID").toString())
+                doctorCardBinding.ll.removeView(doctorCardBinding.btnBook)
                 doctorCardBinding.tvName.text = (
                         doc.get("lname").toString()
                                 + ", " + doc.get("fname").toString()
@@ -117,14 +132,6 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 doctorCardBinding.tvFee.text = ("PHP " +
                         doc.get("rate").toString())
 
-                doctorCardBinding.btnBook.setOnClickListener() {
-                    val uid= (context as DoctorsActivity).intent.getStringExtra("PUID")
-                    val intent = Intent(context, CalendarActivity::class.java)
-                    intent.putExtra("PUID",uid)
-                    intent.putExtra("DUID",doc.get("UID").toString())
-                    Log.d("asdc",uid+" " + doc.get("UID").toString())
-                    context.startActivity(intent)
-                }
             }
         }
 

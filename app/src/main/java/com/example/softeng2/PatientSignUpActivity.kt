@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
-import com.example.softeng2.databinding.ActivitySignup2Binding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PatientSignUpActivity : AppCompatActivity() {

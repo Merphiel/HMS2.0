@@ -34,11 +34,12 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     private lateinit var mAdapter: MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private var count:Int=0
-
+    private lateinit var DUID:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_home)
 
+        DUID=intent.getStringExtra("DUID").toString()
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.navView)
         recyclerView = findViewById(R.id.rv_doctors)
@@ -130,11 +131,17 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
             R.id.home -> {
 
             }
+            R.id.appointments -> {
+                val intent = Intent(this, DoctorCalendarAppointmentsActivity::class.java)
+                Log.d("DUID",DUID)
+                intent.putExtra("DUID",DUID)
+                startActivity(intent)
+            }
             R.id.organizations -> {
                 Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 var uid = intent.getStringExtra("DUID")?:""
-                val intent = Intent(this, DoctorOrganizationActivity::class.java)
-                intent.putExtra("DUID",uid)
+                val intent = Intent(this, OrganizationActivity::class.java)
+                intent.putExtra("DUID",DUID)
                 startActivity(intent)
             }
             R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
