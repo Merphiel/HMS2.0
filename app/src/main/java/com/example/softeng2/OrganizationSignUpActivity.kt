@@ -13,8 +13,9 @@ class OrganizationSignUpActivity : AppCompatActivity() {
     private lateinit var organizationNameEditText: EditText
     private lateinit var phoneNumberEditText: EditText
     private lateinit var emailEditText: EditText
+    private lateinit var idEditText: EditText
     private lateinit var doneButton: Button
-
+    private var oidList = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup_organization)
@@ -24,7 +25,16 @@ class OrganizationSignUpActivity : AppCompatActivity() {
         phoneNumberEditText = findViewById(R.id.inp_phone)
         emailEditText = findViewById(R.id.inp_email)
         doneButton = findViewById(R.id.btn_done)
+        idEditText=findViewById(R.id.inp_id)
 
+        val db = FirebaseFirestore.getInstance()
+        val documentList = mutableListOf<Map<String, Any>>()
+        val doctorsCollectionRef = db.collection("organizations").get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                        oidList.add(document.get("OID").toString())
+                }
+            }
         doneButton.setOnClickListener {
             if (validateInputs()) {
                 Log.d("sendhelp","b")
@@ -34,6 +44,7 @@ class OrganizationSignUpActivity : AppCompatActivity() {
                 uData["oname"] = organizationNameEditText.text.toString()
                 uData["phone"] = phoneNumberEditText.text.toString()
                 uData["email"] = emailEditText.text.toString()
+                uData["OID"] = idEditText.text.toString()
 
                 Log.d("sendhelp","c")
                 db.collection("organizations")
@@ -57,6 +68,7 @@ class OrganizationSignUpActivity : AppCompatActivity() {
         val organizationName = organizationNameEditText.text.toString().trim()
         val phoneNumber = phoneNumberEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
+        val oid =idEditText.text.toString().trim()
 
         if (organizationName.isEmpty()) {
             organizationNameEditText.error = "Please enter the organization's name"
@@ -71,6 +83,11 @@ class OrganizationSignUpActivity : AppCompatActivity() {
 
         if (email.isEmpty()) {
             emailEditText.error = "Please enter your email"
+            return false
+        }
+
+        if (oidList.contains(oid)) {
+            idEditText.error = "ID Already taken. Please assign a different one"
             return false
         }
 

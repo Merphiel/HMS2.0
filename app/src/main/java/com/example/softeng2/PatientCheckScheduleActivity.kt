@@ -16,7 +16,7 @@ import com.google.firebase.firestore.SetOptions
 class PatientCheckScheduleActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule)
+        setContentView(R.layout.activity_viewschedulepatientcard)
 
         val dname:TextView= findViewById(R.id.tv_docname)
         val demail:TextView= findViewById(R.id.tv_docemail)
@@ -24,6 +24,7 @@ class PatientCheckScheduleActivity: AppCompatActivity() {
         val dtype:TextView= findViewById(R.id.tv_doctype)
         val drate:TextView= findViewById(R.id.tv_docrate)
         val ddate:TextView= findViewById(R.id.tv_date)
+        val dloc:TextView= findViewById(R.id.tv_loc)
         val bdemail:ImageButton =findViewById(R.id.btn_demail)
         val bdphone:ImageButton =findViewById(R.id.btn_phone)
         val back:Button =findViewById(R.id.btn_back)

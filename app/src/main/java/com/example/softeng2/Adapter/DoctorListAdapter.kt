@@ -21,8 +21,6 @@ class DoctorListAdapter(
     var num=0
     class ViewHolder(private val doctorCardBinding:DoctorCardBinding, private val context: Context) : RecyclerView.ViewHolder(doctorCardBinding.root){
         fun bind(doc: Map<String, Any>, pos:Int) {
-            val db = Firebase.firestore
-            val doctorsCollectionRef = db.collection("doctors")
             Log.d("errorasd",doc.get("UID").toString())
                     doctorCardBinding.tvName.text = (
                             doc.get("lname").toString()
@@ -58,20 +56,6 @@ class DoctorListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val db = Firebase.firestore
-        val doctorsCollectionRef = db.collection("doctors")
-
-        doctorsCollectionRef.get()
-            .addOnSuccessListener { querySnapshot ->
-                for (documentSnapshot in querySnapshot) {
-                    val documentId = documentSnapshot.id
-                    Log.d("errorasddid",documentId)
-                    holder.bind(documentList[num], position)
-                    num++;
-                }
-            }
-            .addOnFailureListener { exception ->
-                println("Error getting documents from 'doctors' collection: $exception")
-            }
+        holder.bind(documentList[position], position)
     }
 }

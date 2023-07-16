@@ -1,6 +1,8 @@
 package com.example.softeng2
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,7 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.softeng2.Adapter.DoctorListAdapter
+import com.example.softeng2.databinding.DoctorCardBinding
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -21,7 +27,7 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private lateinit var recyclerView: RecyclerView
     private lateinit var mAdapter: OrganizationHome.MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
-
+    private var count:Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organization_home)
@@ -44,8 +50,29 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
         // Set up the RecyclerView
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        mAdapter = MyAdapter()
-        recyclerView.adapter = mAdapter
+
+        val db = Firebase.firestore
+        val documentList = mutableListOf<Map<String, Any>>()
+        val doctorsCollectionRef = db.collection("doctors").get()
+            .addOnSuccessListener { querySnapshot ->
+                count = querySnapshot.size()
+                for (document in querySnapshot.documents) {
+                    val documentData = document.data
+                    documentData?.let {
+                        val documentHashMap = HashMap<String, Any>()
+                        documentHashMap["UID"]=document.id
+                        for ((key, value) in it.entries) {
+                            documentHashMap[key] = value
+                        }
+                        documentList.add(documentHashMap)
+                    }
+                }
+                mAdapter = MyAdapter(documentList,count,this)
+                recyclerView.adapter = mAdapter
+            }
+            .addOnFailureListener { exception ->
+                println("Error getting documents: $exception")
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -60,8 +87,6 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
         // Handle navigation item clicks
         when (item.itemId) {
             R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-            R.id.doctors -> Toast.makeText(this, "Doctors", Toast.LENGTH_SHORT).show()
-            R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
             R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show()
         }
@@ -70,24 +95,51 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
         drawerLayout.closeDrawer(navigationView)
         return true
     }
-    private inner class MyAdapter : RecyclerView.Adapter<OrganizationHome.MyAdapter.ViewHolder>() {
+    private inner class MyAdapter(
 
-        // ViewHolder class
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textView: TextView = itemView.findViewById(R.id.tv_doctors)
+        private val documentList: MutableList<Map<String, Any>>,
+        private val itemcount: Int,
+        private val context: Context,
+    ) : RecyclerView.Adapter<OrganizationHome.MyAdapter.ViewHolder>() {
+        var num=0
+        inner class ViewHolder(private val doctorCardBinding: DoctorCardBinding, private val context: Context) : RecyclerView.ViewHolder(doctorCardBinding.root){
+            fun bind(doc: Map<String, Any>, pos:Int) {
+                Log.d("errorasd",doc.get("UID").toString())
+                doctorCardBinding.tvName.text = (
+                        doc.get("lname").toString()
+                                + ", " + doc.get("fname").toString()
+                                + " " + doc.get("mname")
+                            .toString() + ".")
+
+                doctorCardBinding.tvType.text = (
+                        doc.get("type").toString())
+
+                doctorCardBinding.tvFee.text = ("PHP " +
+                        doc.get("rate").toString())
+
+                doctorCardBinding.btnBook.setOnClickListener() {
+                    val uid= (context as DoctorsActivity).intent.getStringExtra("PUID")
+                    val intent = Intent(context, CalendarActivity::class.java)
+                    intent.putExtra("PUID",uid)
+                    intent.putExtra("DUID",doc.get("UID").toString())
+                    Log.d("asdc",uid+" " + doc.get("UID").toString())
+                    context.startActivity(intent)
+                }
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_doctors, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.textView.text = "Item $position"
+            val binding = DoctorCardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+            return ViewHolder(binding,context)
         }
 
         override fun getItemCount(): Int {
-            return 10
+            Log.d("aasda",itemcount.toString())
+            return itemcount
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(documentList[position], position)
         }
     }
 }

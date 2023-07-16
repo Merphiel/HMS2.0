@@ -51,7 +51,6 @@
         android:layout_gravity="start"
         android:background="@color/white"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_patient_menu">
 
     </com.google.android.material.navigation.NavigationView>

@@ -1,4 +1,5 @@
 package com.example.softeng2
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.softeng2.Adapter.DoctorListAdapter
+import com.example.softeng2.databinding.AppointmentCardBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -25,6 +34,8 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var mAdapter: MyAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
+
+    private var count:Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_home)
@@ -47,8 +58,69 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         // Set up the RecyclerView
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        mAdapter = MyAdapter()
-        recyclerView.adapter = mAdapter
+
+
+        val db = Firebase.firestore
+        val documentList = mutableListOf<Map<String, Any>>()
+        val now = LocalDate.now()
+        val max = now.plus(7,ChronoUnit.DAYS)
+        val nowts:Timestamp= Timestamp(LocalDate.parse(LocalDate.of(now.year,now.monthValue,now.dayOfMonth)
+            .toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().toEpochSecond(ZoneOffset.UTC),0)
+        val maxts:Timestamp= Timestamp(LocalDate.parse(LocalDate.of(max.year,max.monthValue,max.dayOfMonth)
+            .toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().toEpochSecond(ZoneOffset.UTC),0)
+        db.collection("schedules").document("5BMDpeSMuXbPoBDNcnqN").get().addOnSuccessListener() {
+            data->
+            val temp = data.data!!.get("Date") as Timestamp
+            Log.d("date collection" , temp.toString())
+            Log.d("date collection" , now.toString())
+            Log.d("date collection", max.toString())
+            Log.d("date collection" , nowts.toString())
+            Log.d("date collection", maxts.toString())
+            if (temp>=nowts) {
+
+                Log.d("date ver", "is within range of 1")
+            }
+            if (temp<=maxts) {
+
+                Log.d("date ver", "is within range of 2")
+            }
+            Log.d("date puid",intent.getStringExtra("PUID").toString())
+        }
+        db.collection("schedules")
+            .whereGreaterThan("Date",nowts)
+            .whereLessThan("Date",maxts)
+            .whereEqualTo("PUID",intent.getStringExtra("PUID").toString())
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                Log.d("aasdac",querySnapshot.size().toString())
+                count = querySnapshot.size()
+                for (document in querySnapshot.documents) {
+                    val documentData = document.data
+                    documentData?.let {
+                        val documentHashMap = HashMap<String, Any>()
+                        documentHashMap["SID"]=document.id
+                        for ((key, value) in it.entries) {
+                            documentHashMap[key] = value
+                        }
+                        db.collection("doctors").document(documentHashMap["DUID"].toString()).get().addOnSuccessListener {
+                            data->
+                            val documentData2 = data.data
+                                documentData2?.let {
+                                    for ((key, value) in it.entries) {
+                                        documentHashMap[key] = value
+                                    }
+                                }
+
+                        }
+                        documentList.add(documentHashMap)
+                    }
+                }
+                mAdapter = MyAdapter(documentList,count,this,intent.getStringExtra("PUID")?:"")
+                recyclerView.adapter = mAdapter
+            }
+            .addOnFailureListener { exception ->
+                println("Error getting documents: $exception")
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -66,21 +138,9 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.doctors -> {
                 val uid= intent.getStringExtra("PUID")
                 Log.d("aasdb", uid?:"")
+                Log.d("aasdb", uid?:"")
                 Toast.makeText(this, uid, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DoctorsActivity::class.java)
-                intent.putExtra("PUID",uid)
-                startActivity(intent)
-            }
-            R.id.organizations -> {
-                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, OrganizationActivity::class.java)
-                startActivity(intent)
-            }
-
-            R.id.appointments -> {
-                val uid= intent.getStringExtra("PUID")
-                Toast.makeText(this, "Appointments", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, PatientCalendarAppointmentsActivity::class.java)
                 intent.putExtra("PUID",uid)
                 startActivity(intent)
             }
@@ -97,24 +157,51 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         drawerLayout.closeDrawer(navigationView)
         return true
     }
-    private inner class MyAdapter : RecyclerView.Adapter<PatientHomeActivity.MyAdapter.ViewHolder>() {
+    private inner class MyAdapter(
+        private val documentList: MutableList<Map<String, Any>>,
+        private val itemcount: Int,
+        private val context: Context,
+        private val puid: String) : RecyclerView.Adapter<PatientHomeActivity.MyAdapter.ViewHolder>() {
 
         // ViewHolder class
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textView: TextView = itemView.findViewById(R.id.tv_patients)
+        inner class ViewHolder(private val appointmentCardBinding: AppointmentCardBinding,private val context:Context) : RecyclerView.ViewHolder(appointmentCardBinding.root) {
+            fun bind(apt: Map<String, Any>, pos:Int) {
+            Log.d("errorasd",apt.get("SID").toString())
+                apt.let {
+
+                }
+                appointmentCardBinding.tvFee.text=apt.get("rate").toString()
+                appointmentCardBinding.tvName.text=apt.get("rate").toString()
+                val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+                val date = apt.get("Date") as Timestamp
+
+                appointmentCardBinding.tvTime.text=apt.get(dateFormat.format(date.toDate())+" "+apt.get("Time")).toString()
+            appointmentCardBinding.btnDetails.setOnClickListener() {
+                val uid= (context as PatientHomeActivity).intent.getStringExtra("PUID")
+                val intent = Intent(context, PatientCheckScheduleActivity::class.java)
+                intent.putExtra("PUID",apt.get("PUID").toString())
+                intent.putExtra("DUID",apt.get("DUID").toString())
+                intent.putExtra("SID",apt.get("SID").toString())
+                intent.putExtra("Time",apt.get("Time").toString())
+                intent.putExtra("Date",apt.get("Date").toString())
+                Log.d("asdc",apt.get("UID").toString()+apt.get("PUID").toString() + apt.get("DUID").toString())
+                context.startActivity(intent)
+            }
+         }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_patients, parent, false)
-            return ViewHolder(view)
+            val binding = AppointmentCardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+            return ViewHolder(binding,context)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.textView.text = "Item $position"
+            holder.bind(documentList[position],position)
         }
 
         override fun getItemCount(): Int {
-            return 10
+            Log.d("aasda",itemcount.toString())
+            return itemcount
         }
     }
 }

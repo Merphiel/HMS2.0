@@ -36,7 +36,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
@@ -55,7 +55,37 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/input"
                     android:ems="10"
-                    android:hint="Doe"
+                    android:hint="Hospital"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/inter"
+                    android:text="Organization ID" />
+
+                <EditText
+                    android:id="@+id/inp_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/input"
+                    android:ems="10"
+                    android:hint="HSD"
                     android:inputType="text"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -117,6 +147,19 @@
                     android:ems="10"
                     android:hint="org@gmail.com"
                     android:inputType="textEmailAddress"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/inp_loc"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/input"
+                    android:ems="10"
+                    android:hint="Makati City"
+                    android:inputType="text"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textCursorDrawable="@null"

@@ -27,7 +27,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_patname"
+                android:id="@+id/tv_docname"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -35,7 +35,7 @@
                 android:text="Name" />
 
             <TextView
-                android:id="@+id/tv_patemail"
+                android:id="@+id/tv_docemail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -43,12 +43,28 @@
                 android:text="Email" />
 
             <TextView
-                android:id="@+id/tv_patphone"
+                android:id="@+id/tv_docphone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Phone" />
+
+            <TextView
+                android:id="@+id/tv_doctype"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Specialization" />
+
+            <TextView
+                android:id="@+id/tv_docrate"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Rate" />
 
             <TextView
                 android:id="@+id/tv_date"
@@ -58,6 +74,15 @@
                 android:gravity="center"
                 android:text="Date"
                 android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_loc"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Location" />
 
         </LinearLayout>
 

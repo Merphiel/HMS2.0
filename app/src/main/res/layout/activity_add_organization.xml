@@ -27,6 +27,14 @@
         android:textColor="@color/gray" />
 
 
+    <EditText
+        android:id="@+id/inp_oid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Organization Code"
+        android:inputType="text" />
+
     <Button
         android:id="@+id/btn_existing"
         android:layout_width="match_parent"
@@ -35,6 +43,22 @@
         android:fontFamily="@font/inter_bold"
         android:text="Existing Organization"
         app:cornerRadius="3dp" />
+
+    <EditText
+        android:id="@+id/inp_iid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Organization Name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Organization Location"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/btn_independent"
@@ -45,15 +69,5 @@
         android:text="Independent Organization"
         app:cornerRadius="3dp"
         android:layout_marginBottom="20dp"/>
-
-    <Button
-        android:id="@+id/btn_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="@font/inter_bold"
-        android:text="Confirm"
-        android:textAllCaps="true"
-        app:cornerRadius="3dp" />
 
 </LinearLayout>

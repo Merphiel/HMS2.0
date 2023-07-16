@@ -75,6 +75,15 @@
                 android:text="Date"
                 android:layout_marginBottom="20dp"/>
 
+            <TextView
+                android:id="@+id/tv_loc"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Location" />
+
         </LinearLayout>
 
         <LinearLayout

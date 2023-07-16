@@ -9,12 +9,6 @@
     <item
         android:id="@+id/doctors"
         android:title="Doctors" />
-    <item
-        android:id="@+id/organizations"
-        android:title="Organizations" />
-    <item
-        android:id="@+id/appointments"
-        android:title="Appointments" />
 
     <item android:title="">
         <menu>
