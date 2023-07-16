@@ -76,8 +76,8 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val maxts:Timestamp= Timestamp(LocalDate.parse(LocalDate.of(max.year,max.monthValue,max.dayOfMonth)
             .toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().toEpochSecond(ZoneOffset.UTC),0)
         db.collection("schedules")
-            .whereGreaterThan("Date",nowts)
-            .whereLessThan("Date",maxts)
+            .whereGreaterThanOrEqualTo("Date",nowts)
+            .whereLessThanOrEqualTo("Date",maxts)
             .whereEqualTo("PUID",intent.getStringExtra("PUID").toString())
             .orderBy("Date", Query.Direction.ASCENDING)
             .get()
@@ -159,7 +159,7 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         // ViewHolder class
         inner class ViewHolder(private val appointmentCardBinding: AppointmentCardBinding,private val context:Context) : RecyclerView.ViewHolder(appointmentCardBinding.root) {
             fun bind(apt: Map<String, Any>, pos:Int) {
-            Log.d("errorasd",apt.get("SID").toString())
+                Log.d("errorasd",apt.get("SID").toString())
                 apt.let {
 
                 }
@@ -168,18 +168,18 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 val dateFormat = SimpleDateFormat("dd MMMM yyyy")
                 val date = apt.get("Date") as Timestamp
                 appointmentCardBinding.tvTime.text="When: " + dateFormat.format(date.toDate())+" "+apt.get("Time").toString()
-            appointmentCardBinding.btnDetails.setOnClickListener() {
-                val uid= (context as PatientHomeActivity).intent.getStringExtra("PUID")
-                val intent = Intent(context, PatientCheckScheduleActivity::class.java)
-                intent.putExtra("PUID",apt.get("PUID").toString())
-                intent.putExtra("DUID",apt.get("DUID").toString())
-                intent.putExtra("SID",apt.get("SID").toString())
-                intent.putExtra("Time",apt.get("Time").toString())
-                intent.putExtra("Date",apt.get("Date").toString())
-                Log.d("asdc",apt.get("SID").toString()+apt.get("PUID").toString() + apt.get("DUID").toString())
-                context.startActivity(intent)
+                appointmentCardBinding.btnDetails.setOnClickListener() {
+                    val uid= (context as PatientHomeActivity).intent.getStringExtra("PUID")
+                    val intent = Intent(context, PatientCheckScheduleActivity::class.java)
+                    intent.putExtra("PUID",apt.get("PUID").toString())
+                    intent.putExtra("DUID",apt.get("DUID").toString())
+                    intent.putExtra("SID",apt.get("SID").toString())
+                    intent.putExtra("Time",apt.get("Time").toString())
+                    intent.putExtra("Date", dateFormat.format(date.toDate()))
+                    Log.d("asdc",apt.get("SID").toString()+apt.get("PUID").toString() + apt.get("DUID").toString())
+                    context.startActivity(intent)
+                }
             }
-         }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
