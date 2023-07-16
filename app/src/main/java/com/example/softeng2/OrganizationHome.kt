@@ -98,7 +98,6 @@ class OrganizationHome : AppCompatActivity(), NavigationView.OnNavigationItemSel
             R.id.home -> {
 
             }
-            R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> {
                 val intent = Intent(this@OrganizationHome, MainActivity::class.java)
                 startActivity(intent)

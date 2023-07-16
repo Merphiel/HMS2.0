@@ -33,6 +33,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/doc"
             tools:srcCompat="@drawable/doc" />
 
         <TextView

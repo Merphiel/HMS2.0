@@ -25,6 +25,7 @@ class PatientSignUpActivity : AppCompatActivity() {
         firstNameEditText = findViewById(R.id.inp_fname)
         middleNameEditText = findViewById(R.id.inp_mname)
         lastNameEditText = findViewById(R.id.inp_lname)
+        lastNameEditText = findViewById(R.id.inp_lname)
         phoneNumberEditText = findViewById(R.id.inp_phone)
         emailEditText = findViewById(R.id.inp_email)
         doneButton = findViewById(R.id.btn_done)

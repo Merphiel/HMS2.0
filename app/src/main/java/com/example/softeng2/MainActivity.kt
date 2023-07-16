@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity() {
                                 autoCompleteTxt.setAdapter(adapterItems)
                                 autoCompleteTxt.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
                                     val item = parent.getItemAtPosition(position).toString()
-                                    Toast.makeText(applicationContext, "Item: $item", Toast.LENGTH_SHORT).show()
                                 })
                                 activitySignup2Binding.btnNext.setOnClickListener() {
                                     val uData = HashMap<String,Any>()

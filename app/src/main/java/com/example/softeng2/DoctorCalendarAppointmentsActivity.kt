@@ -46,6 +46,7 @@ class DoctorCalendarAppointmentsActivity: AppCompatActivity() {
         val columns = 8
         val array = Array(rows) { Array(columns) { 0 } }
 
+
         val gridLayout = GridLayout(this).apply {
             columnCount = 8
             rowCount = 22

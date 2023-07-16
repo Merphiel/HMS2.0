@@ -127,19 +127,16 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation item clicks
         when (item.itemId) {
-            R.id.home -> Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
             R.id.doctors -> {
                 val uid= intent.getStringExtra("PUID")
                 Log.d("aasdb", uid?:"")
                 Log.d("aasdb", uid?:"")
-                Toast.makeText(this, uid, Toast.LENGTH_SHORT).show()
+
                 val intent = Intent(this, DoctorsActivity::class.java)
                 intent.putExtra("PUID",uid)
                 startActivity(intent)
             }
 
-            R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
-            R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut ->{
                 val intent = Intent(this@PatientHomeActivity, MainActivity::class.java)
                 startActivity(intent)
@@ -167,6 +164,7 @@ class PatientHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 appointmentCardBinding.tvName.text= apt.get("lname").toString()+ ", " + apt.get("fname").toString()+ " " + apt.get("mname").toString() + "."
                 val dateFormat = SimpleDateFormat("dd MMMM yyyy")
                 val date = apt.get("Date") as Timestamp
+                appointmentCardBinding.layout12.removeView(appointmentCardBinding.tvLocation)
                 appointmentCardBinding.tvTime.text="When: " + dateFormat.format(date.toDate())+" "+apt.get("Time").toString()
                 appointmentCardBinding.btnDetails.setOnClickListener() {
                     val uid= (context as PatientHomeActivity).intent.getStringExtra("PUID")

@@ -152,8 +152,6 @@ class PatientCalendarAppointmentsActivity : AppCompatActivity() {
                                 }
                             }else {
                                 Toast.makeText(applicationContext, "No appointment has been scheduled for this time.", Toast.LENGTH_SHORT).show()
-
-
                             }
                         }
                     }

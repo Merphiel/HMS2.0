@@ -52,7 +52,6 @@ class DoctorSignUpActivity : AppCompatActivity() {
 
         autoCompleteTxt.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
             val item = parent.getItemAtPosition(position).toString()
-            Toast.makeText(applicationContext, "Item: $item", Toast.LENGTH_SHORT).show()
         })
 
         doneButton.setOnClickListener {

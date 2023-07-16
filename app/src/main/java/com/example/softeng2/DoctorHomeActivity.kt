@@ -138,14 +138,11 @@ class DoctorHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 startActivity(intent)
             }
             R.id.organizations -> {
-                Toast.makeText(this, "Organizations", Toast.LENGTH_SHORT).show()
                 var uid = intent.getStringExtra("DUID")?:""
                 val intent = Intent(this, OrganizationActivity::class.java)
                 intent.putExtra("DUID",DUID)
                 startActivity(intent)
             }
-            R.id.myProfile -> Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
-            R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             R.id.logOut -> {
                 val intent = Intent(this@DoctorHomeActivity, MainActivity::class.java)
                 startActivity(intent)
